@@ -1,0 +1,26 @@
+@import "color";
+@import "fonts";
+@import "bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+body{
+
+}
+.text-bold{
+  font-weight: bold;
+}
+.navbar-default {
+  @media (max-height:600px ) {
+    background-color: #fff;;
+    border: 0;
+    border-bottom: 1px;
+  }
+  .logo{
+    width: 70%;
+  }
+  .navbar-header{
+    background: #fff;
+    ul{
+      margin: 15px;
+      text-align: center;
+    }
+  }
+}
