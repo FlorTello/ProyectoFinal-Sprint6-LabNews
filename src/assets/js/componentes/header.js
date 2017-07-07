@@ -1,7 +1,6 @@
 
 'use strict';
 const Header = (data,update) => {
-    console.log(data);
     const header = $('<header></header>');
     const menu = $(`<div class="container row">
       <div class="col-xs-4 col-xs-offset-5 visible-lg">
@@ -36,23 +35,7 @@ const Header = (data,update) => {
         </ul>
       </div>
       </nav>`);
-      const titular = $('<div class="row"><img src="../assets/img/news/'+data[0].img+'"><span class="titular"><h1>'+data[0].title+'</h1></span></div>');
-      const main = $('<div class="container"></div>');
-      const row = $('<div class="row"></div>');
-      const secundarios = $(`<div class="col-lg-6 col-xs-12">
-          <img class="col-xs-12 col-lg-12" src="assets/img/foto-n1.png" alt="">
-          <h1 class="col-xs-12 col-lg-12 text-center">ghhgh</h1>
-        </div>
-        <div class="col-lg-3 col-xs-12">
-          <img class="col-xs-6 col-lg-12"src="assets/img/foto-n1.png" alt="">
-          <h1 class="col-xs-6 col-lg-12">ghhgh</h1>
-        </div>
-        <div class="col-lg-3 col-xs-12">
-          <img class="col-xs-6 col-lg-12"src="assets/img/foto-n1.png" alt="">
-          <h1 class="col-xs-6 col-lg-12">ghhgh</h1>
-        </div>`);
-      row.append(secundarios);
-      main.append(row);
-      header.append(menu,nav, titular, row);
+
+      header.append(menu,nav);
       return header;
 }

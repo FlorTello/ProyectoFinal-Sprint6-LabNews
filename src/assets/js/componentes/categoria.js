@@ -1,31 +1,25 @@
 'use strict';
 
-const Noticias = (update) => {
-  const container = $('<div class="container categories"></div>');
-  $.each(state.categories,(index,item) => {
-    container.append(itemCategoria(index,name));
+const Categorias = (contenedor,data, update) => {
+  $.each(data,(index,item) => {
+    console.log(item);
+    const categoria = $('<section class="container-fluid '+item.title+'"></section>');
+    categoria.append(itemCategoria(index,item.title));
+    contenedor.append(categoria);
+
   });
+  console.log(state.data);
   // reRender(container,data.boards,update)
-  return container;
+  return contenedor;
 
 }
 
-const ItemNoticia = (data, col_n,col_img,col_titulo) => {
-  const noticia = $('<div class="thumbnail col-lg-'+col_n+' col-xs-12"></div>');
-  const img = $('<img class="col-xs-6 col-lg'+col_img+'"src="assets/img/foto-n1.png" alt="">');
-  const titulo = $('<h1 class="col-xs-6 col-lg'+col_titulo+'">ghhgh</h1>');
-
-  noticia.append(img,h1);
-  return noticia;
-
-}
-const itemCategoria = (index, name,data,update) => {
-  const categoria = $('<div class="categoria"></div>');
-  const name = $('<h2>'+name+'</h2>');
-  categoria.append(name);
-  // $.each(state.categories,(index,item) => {
-  //   categoria.append(ItemNoticia(12,12));
-  // });
+const itemCategoria = (index, name) => {
+  console.log(state.main[index]);
+  const categoria = $('<div class="categoria container"></div>');
+  $.each(state.main[index],(i,item) => {
+    categoria.append(Noticia(item));
+  });
   return categoria;
 }
 

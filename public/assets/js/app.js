@@ -53,32 +53,26 @@ const getCategoriesId= (id) => {
 
 'use strict';
 
-const Noticias = (update) => {
-  const container = $('<div class="container categories"></div>');
-  $.each(state.categories,(index,item) => {
-    container.append(itemCategoria(index,name));
+const Categorias = (contenedor,data, update) => {
+  $.each(data,(index,item) => {
+    console.log(item);
+    const categoria = $('<section class="container-fluid '+item.title+'"></section>');
+    categoria.append(itemCategoria(index,item.title));
+    contenedor.append(categoria);
+
   });
+  console.log(state.data);
   // reRender(container,data.boards,update)
-  return container;
+  return contenedor;
 
 }
 
-const ItemNoticia = (data, col_n,col_img,col_titulo) => {
-  const noticia = $('<div class="thumbnail col-lg-'+col_n+' col-xs-12"></div>');
-  const img = $('<img class="col-xs-6 col-lg'+col_img+'"src="assets/img/foto-n1.png" alt="">');
-  const titulo = $('<h1 class="col-xs-6 col-lg'+col_titulo+'">ghhgh</h1>');
-
-  noticia.append(img,h1);
-  return noticia;
-
-}
-const itemCategoria = (index, name,data,update) => {
-  const categoria = $('<div class="categoria"></div>');
-  const name = $('<h2>'+name+'</h2>');
-  categoria.append(name);
-  // $.each(state.categories,(index,item) => {
-  //   categoria.append(ItemNoticia(12,12));
-  // });
+const itemCategoria = (index, name) => {
+  console.log(state.main[index]);
+  const categoria = $('<div class="categoria container"></div>');
+  $.each(state.main[index],(i,item) => {
+    categoria.append(Noticia(item));
+  });
   return categoria;
 }
 
@@ -96,7 +90,6 @@ const reRender = (container,arrayBoard,update) => {
 
 'use strict';
 const Header = (data,update) => {
-    console.log(data);
     const header = $('<header></header>');
     const menu = $(`<div class="container row">
       <div class="col-xs-4 col-xs-offset-5 visible-lg">
@@ -131,54 +124,89 @@ const Header = (data,update) => {
         </ul>
       </div>
       </nav>`);
-      const titular = $('<div class="row"><img src="../assets/img/news/'+data[0].img+'"><span class="titular"><h1>'+data[0].title+'</h1></span></div>');
-      const categories = $('<div class="content"></div>');
-      const row = $('<div class="row"></div>');
-      header.append(menu,nav, titular);
+
+      header.append(menu,nav);
       return header;
 }
 
 'use strict';
 
-const Noticia = (data, col_n,col_img,col_titulo,visible) => {
-  const noticia = $('<div class="thumbnail '+col_n+' col-xs-12"></div>');
-  const img = $('<img class="col-xs-6 '+col_img+'"src="assets/img/foto-n1.png" alt="">');
-  const titulo = $('<h1 class="col-xs-6 '+col_titulo+'">ghhgh</h1>');
+const Noticia = (item) => {
+  if(item.type == 1){
+    const noticia = $('<div class="thumbnail col-lg-12 col-xs-12"></div>');
+    const img = $('<img class="col-xs-12 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
+    const h1 = $('<h1 class="col-xs-12 col-lg-12">'+item.title+'</h1>');
+    noticia.append(img,h1);
+    return noticia;
 
-  noticia.append(img,h1);
-  return noticia;
+  } else if(item.type == 2){
+    const noticia = $('<div class="thumbnail col-lg-6 col-xs-12"></div>');
+    const img = $('<img class="col-xs-6 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
+    const h1 = $('<h1 class="col-xs-6 col-lg-12">'+item.title+'</h1>');
+    noticia.append(img,h1);
+    return noticia;
+
+  }else if(item.type == 3){
+    const noticia = $('<div class="thumbnail col-lg-3 col-xs-12"></div>');
+    const img = $('<img class="col-xs-12 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
+    const h1 = $('<h1 class="col-xs-12 col-lg-12">'+item.title+'</h1>');
+    noticia.append(img,h1);
+    return noticia;
+
+  }else if(item.type == 4){
+    const noticia = $('<div class="thumbnail col-lg-3"></div>');
+    const img = $('<img class="col-xs-6 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
+    const h1 = $('<h1 class="col-xs-6 col-lg-12">'+item.title+'</h1>');
+    noticia.append(img,h1);
+    return noticia;
+
+  }else if(item.type == 5){
+    const noticia = $('<div class="thumbnail col-lg-6"></div>');
+    const img = $('<img class="col-xs-6 col-lg-6"src="assets/img/news/'+item.img+'" alt="">');
+    const h1 = $('<h1 class="col-xs-6 col-lg-6">ghhgh</h1>');
+    noticia.append(img,h1);
+    return noticia;
+  }
+
 
 }
 
 'use strict';
 
+const  filtro= (array, id) => {
+  return array.filter((e)=>{
+    if(e.categories.indexOf(id) !== -1 && e.categories == 3){
+      return e;
+    }
+  });
+};
+
 const render = (root,data) => {
   root.empty();
-  console.log(data);
   const wrapper = $('<div class="wrapper"></div>');
-  if(state.page == 1){
-    wrapper.append(Header(data,_=>{ render(root) }));
-    // wrapper.append(Board(data,_=>{ render(root) }));
-  }else{
-    // wrapper.append(Board(data,_=>{ render(root) }));
-  }
+  const categorias = $('<div class=""></div>');
+    wrapper.append(Header(state,_=>{ render(root) }));
+    wrapper.append(Categorias(categorias,state.categories,_=>{ render(root) }));
+    // wrapper.append(categories(state.categories,_=>{ render(root) }));
 
   root.append(wrapper);
 }
 const state = {
-  page: 1,
   data: {},
-  categories: {}
+  categories: {},
+  main: []
 };
 $( _ => {
   const root = $("#root");
       getCategories().then((response) => {
           state.categories = response;
           getNews().then((response) => {
-              render(root,state.data);
+            state.data = response;
+            state.categories.map((e,i) => {
+              state.main.push(filtro(state.data,i));
+            });
+              render(root,state);
           });
-          state.data = response;
-          render(root,state.data);
      });
 });
 
