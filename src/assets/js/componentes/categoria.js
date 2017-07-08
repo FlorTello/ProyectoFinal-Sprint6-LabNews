@@ -3,33 +3,38 @@
 const Categorias = (contenedor,data, update) => {
   $.each(data,(index,item) => {
     console.log(item);
-    const categoria = $('<section class="container-fluid '+item.title+'"></section>');
-    categoria.append(itemCategoria(index,item.title));
-    contenedor.append(categoria);
+    if(item.title == "carrousel"){
+      const carousel = $('<div id="myCarousel" class="container carousel slide "><div>');
+      categoria = $('<div class="carousel-inner"></div>');
+      const controles = $(`<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <h1 class=""><</h1>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <h1 class="">></h1>
+      </a>`);
+
+      categoria.append(itemCategoria(index,item.title,update));
+      carousel.append(categoria);
+      carousel.append(categoria);
+      carousel.append(controles);
+      contenedor.append(carousel);
+    }else{
+      const categoria = $('<section class="container '+item.title+'"></section>');
+      categoria.append(itemCategoria(index,item.title,update));
+      contenedor.append(categoria);
+    }
 
   });
   console.log(state.data);
-  // reRender(container,data.boards,update)
   return contenedor;
 
 }
 
-const itemCategoria = (index, name) => {
+const itemCategoria = (index, name, update) => {
   console.log(state.main[index]);
-  const categoria = $('<div class="categoria container"></div>');
+  const categoria = $('<div class=" row categoria"></div>');
   $.each(state.main[index],(i,item) => {
-    categoria.append(Noticia(item));
+    categoria.append(Noticia(item,i,update));
   });
   return categoria;
-}
-
-const reRender = (container,arrayBoard,update) => {
-  container.empty();
-  if (arrayBoard.length > 0) {
-    $.each(arrayBoard,(index,item) => {
-      container.append(itemBoard(index, item,update));
-    });
-  } else {
-    container.append($('<p>Boards no encontrado</p>'));
-  }
 }

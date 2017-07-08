@@ -56,35 +56,114 @@ const getCategoriesId= (id) => {
 const Categorias = (contenedor,data, update) => {
   $.each(data,(index,item) => {
     console.log(item);
-    const categoria = $('<section class="container-fluid '+item.title+'"></section>');
-    categoria.append(itemCategoria(index,item.title));
-    contenedor.append(categoria);
+    if(item.title == "carrousel"){
+      const carousel = $('<div id="myCarousel" class="container carousel slide "><div>');
+      categoria = $('<div class="carousel-inner"></div>');
+      const controles = $(`<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <h1 class=""><</h1>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <h1 class="">></h1>
+      </a>`);
+
+      categoria.append(itemCategoria(index,item.title,update));
+      carousel.append(categoria);
+      carousel.append(categoria);
+      carousel.append(controles);
+      contenedor.append(carousel);
+    }else{
+      const categoria = $('<section class="container '+item.title+'"></section>');
+      categoria.append(itemCategoria(index,item.title,update));
+      contenedor.append(categoria);
+    }
 
   });
   console.log(state.data);
-  // reRender(container,data.boards,update)
   return contenedor;
 
 }
 
-const itemCategoria = (index, name) => {
+const itemCategoria = (index, name, update) => {
   console.log(state.main[index]);
-  const categoria = $('<div class="categoria container"></div>');
+  const categoria = $('<div class=" row categoria"></div>');
   $.each(state.main[index],(i,item) => {
-    categoria.append(Noticia(item));
+    categoria.append(Noticia(item,i,update));
   });
   return categoria;
 }
 
-const reRender = (container,arrayBoard,update) => {
-  container.empty();
-  if (arrayBoard.length > 0) {
-    $.each(arrayBoard,(index,item) => {
-      container.append(itemBoard(index, item,update));
-    });
-  } else {
-    container.append($('<p>Boards no encontrado</p>'));
-  }
+'use strict';
+
+const Detalle = (index) => {
+  const contenedor = $(`<div class="container">
+    <h1>`+state.selectedItem.title+`.
+    </h1>
+    <p>`+state.selectedItem.brief+`</p>
+    <img src="assets/img/news/`+state.selectedItem.img+`" alt="" class="col-lg-12 col-xs-12">
+      <div class="col-xs-12 col-lg-8">
+        <img src="assets/img/authors/`+state.selectedItem.author.picture+`" alt="" class="col-lg-2 col-xs-2">
+        <p>`+state.selectedItem.author.name+` <br> `+ state.selectedItem['published-date']+` <br> `+ state.selectedItem.author.user+`</p>
+
+      </div>
+      <div class="col-xs-12 col-lg-8">
+        `+state.selectedItem.body+`
+      </div>
+      <div class="col-xs-12 col-lg-4">
+        <h3>Notas Relacionadas</h3>
+        <div class="col-xs-12">
+          <div class="col-xs-6">
+            <img src="" alt="">
+            <h3>texto</h3>
+          </div>
+          <div class="col-xs-6">
+            <img src="" alt="">
+            <h3>texto</h3>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <img src="" alt="">
+        </div>
+      </div>
+  </div>`);
+  return contenedor;
+}
+
+'use strict';
+
+const Footer = () => {
+  const contenedor = $(`<footer class="container-fluid footer">
+                    <div class="footer__container container">
+                        <div class="col-xs-4">
+                          <p>© Editado por Laboratoria
+                              Av. José Pardo #601 Lima 1 Perú
+                              Copyright © Laboratoria.la
+                              Todos los derechos reservados.</p>
+                        </div>
+                        <div class="col-xs-4">
+                          <p>DIRECTOR GENERAL:
+                              Francisco Miró Quesada Cantuarias 
+                              DIRECTOR PERIODÍSTICO:
+                              Fernando Berckemeyer Olaechea 
+                              SUSCRIPCIONES:
+                              suscriptores@comercio.com.pe 
+                              PUBLICIDAD ONLINE:
+                              fonoavisos@comercio.com.pe 
+                              CLUB EL COMERCIO:
+                              clubelcomercio@comercio.com.pe
+                              Compromiso de Autorregulación Comercial</p>
+                        </div>
+                        <div class="col-xs-4">
+                          <p>TÉRMINOS Y CONDICIONES DE USO
+                            TRABAJA CON NOSOTROS
+                            LIBRO DE RECLAMACIONES
+                            SEDES PRINCIPALES
+                            POLÍTICAS DE PRIVACIDAD
+                            Síguenos
+                            </p>
+                        </div>
+                </div>
+          </footer>`);
+  return contenedor;
 }
 
 
@@ -131,40 +210,65 @@ const Header = (data,update) => {
 
 'use strict';
 
-const Noticia = (item) => {
+const Noticia = (item,index,update) => {
   if(item.type == 1){
-    const noticia = $('<div class="thumbnail col-lg-12 col-xs-12"></div>');
+    const noticia = $('<div class="thumbnail img-'+item.categories[0]+' type-'+item.type+' item-notice col-lg-12 col-xs-12"></div>');
     const img = $('<img class="col-xs-12 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
-    const h1 = $('<h1 class="col-xs-12 col-lg-12">'+item.title+'</h1>');
-    noticia.append(img,h1);
+    const h4 = $('<h4 class="col-xs-12 col-lg-12">'+item.title+'</h4>');
+    noticia.append(img,h4);
+    noticia.on('click',(e)=>{
+      state.page = 2;
+      state.selectedItem =item;
+      update();
+    });
     return noticia;
 
   } else if(item.type == 2){
-    const noticia = $('<div class="thumbnail col-lg-6 col-xs-12"></div>');
+    const noticia = $('<div class="thumbnail img-'+item.categories[0]+' type-'+item.type+' item-notice col-lg-6 col-xs-12"></div>');
     const img = $('<img class="col-xs-6 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
-    const h1 = $('<h1 class="col-xs-6 col-lg-12">'+item.title+'</h1>');
-    noticia.append(img,h1);
+    const h4 = $('<h4 class="col-xs-6 col-lg-12">'+item.title+'</h4>');
+    noticia.append(img,h4);
+    noticia.on('click',(e)=>{
+      state.page = 2;
+      state.selectedItem =item;
+      update();
+    });
     return noticia;
 
   }else if(item.type == 3){
-    const noticia = $('<div class="thumbnail col-lg-3 col-xs-12"></div>');
+    const noticia = $('<div class="thumbnail img-'+item.categories[0]+' type-'+item.type+' item-notice col-lg-3 col-xs-12"></div>');
     const img = $('<img class="col-xs-12 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
-    const h1 = $('<h1 class="col-xs-12 col-lg-12">'+item.title+'</h1>');
-    noticia.append(img,h1);
+    const h4 = $('<h4 class="col-xs-12 col-lg-12">'+item.title+'</h4>');
+    noticia.append(img,h4);
+    noticia.on('click',(e)=>{
+      state.page = 2;
+      state.selectedItem =item;
+      update();
+    });
     return noticia;
 
   }else if(item.type == 4){
-    const noticia = $('<div class="thumbnail col-lg-3"></div>');
+    const noticia = $('<div class="thumbnail img-'+item.categories[0]+' type-'+item.type+' item-notice col-lg-3 item"></div>');
     const img = $('<img class="col-xs-6 col-lg-12"src="assets/img/news/'+item.img+'" alt="">');
-    const h1 = $('<h1 class="col-xs-6 col-lg-12">'+item.title+'</h1>');
-    noticia.append(img,h1);
+    const h4 = $('<h4 class="col-xs-6 col-lg-12">'+item.title+'</h4>');
+    noticia.append(img,h4);
+    noticia.on('click',(e)=>{
+      state.page = 2;
+      state.selectedItem =item;
+      update();
+    });
     return noticia;
 
   }else if(item.type == 5){
-    const noticia = $('<div class="thumbnail col-lg-6"></div>');
+    const noticia = $('<div class="thumbnail img-'+item.categories[0]+' type-'+item.type+' item-notice col-lg-6 item"></div>');
     const img = $('<img class="col-xs-6 col-lg-6"src="assets/img/news/'+item.img+'" alt="">');
-    const h1 = $('<h1 class="col-xs-6 col-lg-6">ghhgh</h1>');
-    noticia.append(img,h1);
+    const h4 = $('<h4 class="col-xs-6 col-lg-6">ghhgh</h4>');
+    noticia.append(img,h4);
+    noticia.on('click',(e)=>{
+      state.page = 2;
+      state.selectedItem =item;
+      update();
+    });
     return noticia;
   }
 
@@ -174,24 +278,32 @@ const Noticia = (item) => {
 'use strict';
 
 const  filtro= (array, id) => {
-  return array.filter((e)=>{
-    if(e.categories.indexOf(id) !== -1 && e.categories == 3){
-      return e;
-    }
+  return array.filter((e,i)=>{
+      if(e.categories.indexOf(id) !== -1){
+        return e;
+      }
   });
 };
 
 const render = (root,data) => {
   root.empty();
   const wrapper = $('<div class="wrapper"></div>');
-  const categorias = $('<div class=""></div>');
+  if(state.page == 1){
+    const categorias = $('<div class="allcategoria"></div>');
     wrapper.append(Header(state,_=>{ render(root) }));
     wrapper.append(Categorias(categorias,state.categories,_=>{ render(root) }));
-    // wrapper.append(categories(state.categories,_=>{ render(root) }));
+    $('.carousel').carousel();
+    wrapper.append(Footer(state,_=>{ render(root) }));
 
+  }else{
+    wrapper.append(Header(state,_=>{ render(root) }));
+    wrapper.append(Detalle(state,_=>{ render(root) }));
+    wrapper.append(Footer(state,_=>{ render(root) }));
+  }
   root.append(wrapper);
 }
 const state = {
+  page : 1,
   data: {},
   categories: {},
   main: []
@@ -208,6 +320,7 @@ $( _ => {
               render(root,state);
           });
      });
+
 });
 
 },{}]},{},[1])

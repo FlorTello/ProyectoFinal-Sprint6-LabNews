@@ -2,7 +2,7 @@
 @import "fonts";
 @import "bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 body{
-
+  box-sizing: border-box;
 }
 .text-bold{
   font-weight: bold;
@@ -16,11 +16,32 @@ body{
   .logo{
     width: 70%;
   }
-  .navbar-header{
-    background: #fff;
-    ul{
-      margin: 15px;
-      text-align: center;
+  .navbar-nav{
+    text-align: center;
+    li{
+      margin-left: 25px;
     }
+  }
+}
+.allcategoria{
+  .item-notice{
+    background: $color_secundario;
+    color: #fff;
+    img{
+      padding: 0;
+    }
+  }
+  .Mundo,.Tecnología,.Educación,.Opinión{
+    .img-0{
+      display: none;
+    }
+  }
+}
+.footer{
+  padding: 10px;
+  color: #fff;
+  line-height: 3;
+  &__container{
+    background-color: $color_principal;
   }
 }

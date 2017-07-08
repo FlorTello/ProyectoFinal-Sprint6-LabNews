@@ -1,24 +1,32 @@
 'use strict';
 
 const  filtro= (array, id) => {
-  return array.filter((e)=>{
-    if(e.categories.indexOf(id) !== -1 && e.categories == 3){
-      return e;
-    }
+  return array.filter((e,i)=>{
+      if(e.categories.indexOf(id) !== -1){
+        return e;
+      }
   });
 };
 
 const render = (root,data) => {
   root.empty();
   const wrapper = $('<div class="wrapper"></div>');
-  const categorias = $('<div class=""></div>');
+  if(state.page == 1){
+    const categorias = $('<div class="allcategoria"></div>');
     wrapper.append(Header(state,_=>{ render(root) }));
     wrapper.append(Categorias(categorias,state.categories,_=>{ render(root) }));
-    // wrapper.append(categories(state.categories,_=>{ render(root) }));
+    $('.carousel').carousel();
+    wrapper.append(Footer(state,_=>{ render(root) }));
 
+  }else{
+    wrapper.append(Header(state,_=>{ render(root) }));
+    wrapper.append(Detalle(state,_=>{ render(root) }));
+    wrapper.append(Footer(state,_=>{ render(root) }));
+  }
   root.append(wrapper);
 }
 const state = {
+  page : 1,
   data: {},
   categories: {},
   main: []
@@ -35,4 +43,5 @@ $( _ => {
               render(root,state);
           });
      });
+
 });
